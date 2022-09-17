@@ -6,7 +6,6 @@ from query import query as Q
 from query import db_query
 
 description = "Sheeesh"
-TOKEN = os.getenv('TOKEN')
 BASE_DIR = 'Videos/'
 intents = discord.Intents.default()
 intents.message_content = True
@@ -67,7 +66,4 @@ async def quizme(ctx, language, difficulty):
         for file in files: possible.append(os.path.join(DIR, file))
     question_file = choice(possible)
 
-    
-
-
-bot.run(TOKEN)
+bot.run(os.getenv("TOKEN"))
