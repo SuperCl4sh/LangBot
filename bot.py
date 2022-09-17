@@ -3,20 +3,11 @@ from discord.ext import commands
 import os
 
 description = "Sheeesh"
-with open('token.txt', 'r') as f:
-    for line in f: TOKEN = line
+TOKEN = os.getenv('TOKEN')
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix='?', description=description, intents=intents)
-
-"""def query():
-    conn = psycopg2.connect(os.environ["DATABASE_URL"])
-    with conn.cursor() as cur:
-        cur.execute("SELECT now()")
-        res = cur.fetchall()
-        conn.commit()
-        print(res)"""
 
 @bot.event
 async def on_ready():
