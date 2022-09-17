@@ -1,19 +1,20 @@
 from asyncio import wait_for
 from asyncore import poll
 from utils import *
+from transcribe import main as M
+import psycopg2
+import os
 
-
+HEADER = ''
 
 def query(audio_file):
-    upload_response = upload_file(audio_file)
-    transcript_response = request_transcript(audio_file)
-    polling_endpoint = make_polling_endpoint(transcript_response)
-    wait_for_completion()
-    transcript = get_paragraphs(polling_endpoint)
-"""def query():
+    # TODO: Cache results to minimize API queries
+    return M('Videos/1.mp3')
+
+def db_query():
     conn = psycopg2.connect(os.environ["DATABASE_URL"])
     with conn.cursor() as cur:
         cur.execute("SELECT now()")
         res = cur.fetchall()
         conn.commit()
-        print(res)"""
+        print(res)

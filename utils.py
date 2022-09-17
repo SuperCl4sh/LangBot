@@ -55,7 +55,7 @@ def wait_for_completion(polling_endpoint, header):
         if polling_response['status'] == 'completed':
             break
 
-        time.sleep(5)
+        time.sleep(1)
 
 
 # Get the paragraphs of the transcript
