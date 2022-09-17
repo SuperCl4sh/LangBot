@@ -22,6 +22,8 @@ DIFFICULTIES = [
     'hard'
 ]
 
+done = -1
+
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
@@ -30,7 +32,6 @@ async def on_ready():
 async def orz(ctx):
     """ORZ"""
     await ctx.send('Orz Zeyu')
-    await ctx.send(Q('Videos/1.mp3'))
     return
 
 @bot.command()
@@ -38,7 +39,10 @@ async def join(ctx):
     if not ctx.message.author.voice:
         await ctx.send("Please join a voice channel first.")
         return
-    channel = ctx.message.author.voice.chanenl
+    if ctx.message.guild.voice_client == ctx.message.author.voice.channel:
+        await ctx.send("Bot is already in your voice channel.")
+        return
+    channel = ctx.message.author.voice.channel
     await channel.connect()
     return
 
@@ -65,5 +69,26 @@ async def quizme(ctx, language, difficulty):
     for root, dirs, files in os.walk(DIR, topdown=False):
         for file in files: possible.append(os.path.join(DIR, file))
     question_file = choice(possible)
+    await ctx.send(file=discord.File(question_file))
+    CHECKPOINTS = [1, 2, 3, 5, 10]
+    done = 0
+    for i in range(10, 0, -1):
+        if done:
+            done = -1
+            return
+        if i in CHECKPOINTS:
+            await ctx.send("You have {} seconds remaining.".format(i))
+        asyncio.sleep(1000)
+    done = -1
+    await ctx.send("The time limit is up. You took too long!")
+    return
 
-bot.run(os.getenv("TOKEN"))
+@bot.command()
+async def answer(ctx, ans):
+    if done == -1:
+        ctx.send("No quiz active. To begin one, use ?quizme [language] [difficulty].")
+        return
+    
+
+
+bot.run(os.getenv("TOKEN")) 
