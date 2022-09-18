@@ -1,6 +1,5 @@
 import queue
-from time import thread_time
-from turtle import done
+import time
 import discord
 from discord.ext import commands
 import time
