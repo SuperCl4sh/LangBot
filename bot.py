@@ -69,7 +69,6 @@ async def quizme(ctx, language, difficulty):
     if difficulty not in DIFFICULTIES:
         await ctx.send("Please enter a valid difficulty.")
         return
-    await ctx.send("You are an orz lord.")
     DIR = os.path.join(BASE_DIR, language, difficulty)
     possible = []
     for root, dirs, files in os.walk(DIR, topdown=False):
