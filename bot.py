@@ -38,12 +38,6 @@ async def on_ready():
     print(f'{bot.user} has connected to Discord!')
 
 @bot.command()
-async def orz(ctx):
-    """ORZ"""
-    await ctx.send('Orz Zeyu')
-    return
-
-@bot.command()
 async def join(ctx):
     if not ctx.message.author.voice:
         await ctx.send("Please join a voice channel first.")
@@ -101,13 +95,17 @@ async def answer(ctx, *args):
     if ctx.message.author not in queue:
         await ctx.send("No quiz active. To begin one, use ?quizme [language] [difficulty].")
         return
-    get_points(ctx.message.author.id)
     audio_path, start_time = queue[ctx.message.author]
+    queue.pop(ctx.message.author, None)
+    get_points(ctx.message.author.id)
     end_time = time.perf_counter() # Get end time before API query
+    if end_time - start_time > 10:
+        await ctx.send("An error occured. Please try again.")
+        return
     user_ans, actual_ans = string_to_vector(' '.join([word.lower() for word in args])), string_to_vector(' '.join([paragraph.lower() for paragraph in Q(audio_path)]))
     score = get_score(user_ans, actual_ans, end_time - start_time)
     await ctx.send("You scored {}!".format(score))
-    queue.pop(ctx.message.author, None)
+    
     update_points(ctx.message.author.id, score)
     return
 

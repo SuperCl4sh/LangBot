@@ -18,10 +18,11 @@ def get_points(user):
     with conn.cursor() as cur:
         for statement in statements:
             cur.execute(statement)
-            if len(res): res = cur.fetchall()[0]
+            res = cur.fetchall()
+            if len(res): res = res[0]
         if not len(res):
             cur.execute("INSERT INTO accounts (id, points) VALUES ({},{})".format(user, 0))
-            res = tuple(user, 0)
+            res = (user, 0)
     user, res = res
     conn.commit()
     return res
